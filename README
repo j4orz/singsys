@@ -15,6 +15,28 @@ Currently picograd implements basic tensor operations and neural network primiti
 - [ ] Autograd (automatic differentiation)
 - [ ] Optimizers (SGD, Adam, etc.)
 
+## Getting Started / Building
+## Building
+
+This project uses [Cargo](https://doc.rust-lang.org/cargo/) (Rust’s package manager). To build:
+
+To build:
+```sh
+cargo build --release
+./target/release/picograd
+```
+
+To run:
+```sh
+cargo run
+```
+
+To run tests:
+
+```sh
+cargo test
+```
+
 ## Usage
 We'd like to keep a Pytorch-like API, see `main.rs`for example usage of what is currently implemented.
 
