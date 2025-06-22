@@ -13,14 +13,16 @@
 - [Middleend: Optimizer]()
 - [Backend: Generator]()
 ---
-# Optimizing Run Times — Beyond AST IR
-- [Two-tiered graphs: CFG(BB)]()
-- [Single-tiered graphs: SoN]()
-- [Equivalence graphs: egraphs]()
+# Optimizing Run Times
+- [Directed Acyclic Graphs: ASTs]()
+- [Two-tiered Graphs: CFG(BBs)]()
+- [Single-tiered Graphs: SoN]()
+- [Equivalence Graphs: egraphs]()
 ---
-# Optimizing Compile Times — Beyond batched compilation
-- [Incremental]()
-- [Data-oriented]()
+# Optimizing Compile Times
+- [Batched compilation]()
+- [Incremental compilation]()
+- [Data-oriented compilation]()
 ---
 # Vector Processors: NEON, SSE, NVPTX
 - [Processor Parallelism (Instruction Level) Out of Order Speculative Executions, Superscalar, Branch Prediction]()
