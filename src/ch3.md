@@ -1,192 +1,174 @@
-# 2. Generation
+# B. Computing, Chips, Compilers
 
 **Contents**
-- [2.1 Autoregressive Models]()
-    - [Recurrent Neural Networks (RNNs)]()
-    - [Long Short-Term Memory Networks (LSTMs)]()
-    - [Generative Pretrained Transformers (GPTs) with dense qwen/llama]()
-    - [Mixture of Experts (MoEs) with moe deepseek/olmoe]()
-<!-- - [3.2 Diffusion Models]()
-https://x.com/DrYangSong/status/1891314153580556468
-https://x.com/dpkingma/status/1863662926101434594
-https://x.com/sirbayes/status/1773771737127428236
-https://diffusion.csail.mit.edu/
-- [3.3 Variational Autocenters]()
-- [3.4 Normalizing Flow Models]()
-- [3.5 Generative Adversarial Networks]()
-- [3.3 Energy Based Models]() -->
+- [B.1 Chips: Physical Evaluators]()
+    - [Macroarchitecture: RISC-V]()
+    - [Microarchitecture: Single-cycle, Multi-cycle, Pipelined]()
+    - [Processor Parallelism (Instruction Level) Out of Order Speculative Executions, Superscalar, Branch Prediction]()
+    - [Memory:]()
+- [B.2 Compilers: Virtual Translators]()
+    - [Intermediate Representations]()
+    - [CFG+BBs: LLVM (Clang, Swift, Julia, Rust)]()
+    - [SSA?]()
+    - [SoN: JVM's Hotspot (C2), v8's Turbofan, PHP 8, libfirm]()
+        - [Incremental Compilation: Frontend (Parser), Middleend (Optimizer), Backend (Generator)]()
+        - [Arithmetic]()
+        - [Aliasing]()
+        - [Control flow]()
+        - [Heap]()
+    - [egraphs: cranelift]()
+        - [Incremental Compilation: Frontend (Parser), Middleend (Optimizer), Backend (Generator)]()
+        <!-- https://github.com/mwillsey/cs265/tree/2024-fall?tab=readme-ov-file
+        https://inst.eecs.berkeley.edu/~cs294-260/sp24/ -->
+- [B.3 Performance Analysis and Tuning: Bottlenecks]()
+    - [Memory Bound: Cache Misses]()
+    - [Compute Bound: Parallel....]()
+    - [Bad Speculation: Branch Mispredictions]()
+    - [Frontend Bound]()
 
-# 2.1 Autoregressive Models
+note to self:
+- zip the stack from the bottom up: code generator for riscv. do not implement the uarch for riscv core.
+- compiler first. then performance analysis.
+- even if it's not necessarily the case that all performance engineers have compiler experience,,
+it's nice to see the common optimizations a modern day optimizting compiler makes.
 
-## Feedforward Neural Networks (FNNs)
+NB. SoN is the third:
+    a. tree: precedence is represented via tree's hierarchy.
+    b. two-tiered nested graph of basic blocks of instructions: edges denote ONLY control flow
+    c. single-tiered flat graph of instructions: edges denote control flow OR data flow
+       SoN makes dependencies explicit and schedule(order) implicit
+       decouple control from data. SoN philosophy says why do we have so many
+       data embdedded in control chain?
 
-Autoregressive language models.
-logistic regression -> FFN -> RNN -> LSTM -> GPT
+# B.1 Chips: Physical Evaluators
 
-```python
-"""
-model: Neural Language Models (Bengio et al. 2003)
+### Macroarchitecture: RISC-V
 
-Dimension key:
-# windows
-B: batch size
-T: sequence length
+processor and memory
 
-# input/output
-V: vocabulary size
-E: embedding dimension (E != D in paper)
-D: model dimension
-"""
-import picograd
-# import torch
-import matplotlib.pyplot as plt
-# picograd = torch
-# %matplotlib inline
-# from jaxtyping import
 
-# *********************MODEL*********************
-B, T = 32, 3
-V, E, D = 27, 10, 200
+### Microarchitecture: Single-cycle, Multi-cycle, Pipelined
 
-class Linear:
-  def __init__(self, D_in, D_out, bias=True):
-    self.W_DiDo = picograd.randn((D_in, D_out)) * 0.01
-    self.b_Do = picograd.zeros(D_out) if bias else None
+- general purpose registers
+- load/store architecture
 
-  def __call__(self, X_Di):
-    self.X_Do = X_Di @ self.W_DiDo
-    if self.b_Do is not None: self.X_Do += self.b_Do
-    self.out = self.X_Do
-    return self.X_Do
+architecture is the programming model "view" of the computer.
 
-  def parameters(self):
-    return [self.W_DiDo] + ([] if self.b_Do is None else [self.b_Do])
+von neumann architecture "5" components:
+(preliminary discusion of logical design of electronic computing instrument 1946)
+- processor: control + data
+- memory (instructions + data)
+- i/o
 
-class Tanh:
-  def __call__(self, X_BD):
-    self.X_BD = picograd.tanh(X_BD)
-    self.out = self.X_BD
-    return self.X_BD
-  
-  def parameters(self):
-    return []
+.. PROCESSOR: evaluates the instruction (computes)
+.. --------------------------------------------------------------------------------
 
-model = [
-  Linear(T * E, D, bias=False), Tanh(),
-  Linear(D, D, bias=False), Tanh(),
-  Linear(D, V, bias=False)
-]
 
-C_VE = picograd.randn((V,E)) #, generator=g)
-params = [C_VE] + [p for l in model for p in l.parameters()]
-for p in params:
-    p.requires_grad = True
 
-print("model loaded to cpu")
+.. MEMORY
+.. --------------------------------------------------------------------------------
+most von neumann architectures are byte adressable.
+changing with machine learning. fp4. fp2?? energy requirements tradeoff.
 
-# *********************DATA*********************
-import picograd.nn.functional as F
-import random
+word addressable (32/64bits at a time) 4hex/8hex digits
+byte addressable (8bits=1 byte at a time)
 
-words = open('./tests/names.txt', 'r').read().splitlines()
-v = sorted(list(set(''.join(words))))
-encode = { c:i+1 for i,c in enumerate(v) }
-encode['.'] = 0
-decode = { i:c for c,i in encode.items() }
+how are the bytes in a word ordered? little endian (MSB <- LSB)/big endian (LSB -> MSB).
 
-def gen_dataset(words):
-  X, Y = [], []
-  for w in words[:10]:
-    context = [0] * T;
-    for c in w + '.':
-      X.append(context)
-      Y.append(encode[c])
-      # print(''.join(decode[i] for i in context), '-->', decode[encode[c]])
-      context = context[1:] + [encode[c]]
 
-  X, Y = picograd.tensor(X), picograd.tensor(Y) # X:(N,C) Y:(N)
-  return X, Y
 
-random.seed(42)
-random.shuffle(words)
-n1, n2 = int(0.8*len(words)), int(0.9*len(words))
-X_NT, Y_N = gen_dataset(words)#[:n1])
-print(X_NT.shape, Y_N.shape)
-Xdev, Ydev = gen_dataset(words[n1:n2])
-Xte, Yte = gen_dataset(words[n2:])
+.. key(address) value(word)
+.. ------------------------
+000            u8
+001            u8
+010             .
+011             .
+100             .
+101
+110            u8
 
-# *********************TRAINING LOOP*********************
-# 1. preprocess
-# 2. forward
-# 3. backward
-# 4. update
+#### Single-cycle
 
-losses, steps = [], []
-for step in range(100): #200000):
-  # 1. preprocess
-  i_B = picograd.randint(0, X_NT.shape[0], (B,)) # a. minibatch: X_NT -> X_BT
-  X_BT, Y_B = X_NT[i_B], Y_N[i_B]
-  X_BTE = C_VE[X_BT] # b. embed: X_BT -> X_BTE where t ∈ [0,V]
-  X = X_BTE.reshape((-1, T * E)) # concat so X=X_B(TE) # TODO: can take .view instead
+state: sequential logic
+processor: combinational logic (ALU)
+- datapath
+- control unit
 
-  # 2. forward
-  for h in model:
-    X = h(X) # X_B(TE) -> X_BD -> X_BV
-  yhat_BV = X
-  loss = F.cross_entropy(yhat_BV, Y_B)
+core (processor):
+4 stateful elements
+core: 1. processor counter 2.registers (FETCH/load.DECODE)
+memory: 1. instruction memory 2. data memory (STORE)
+- (instr. mem is ROM for now)
+- the multicycle uarch will have more realistic unified memory (instr + data)
 
-  # 3. backward
-  for layer in model:
-    layer.out.retain_grad() # 6 .retain_grad()
-  for p in params:
-    p.grad = None
-  loss.backward()
 
-  # 4. update
-  for p in params:
-    p.data += -0.01 * p.grad
+design process
+*start with stateful elements (LOAD/STORE)
+add blocks of combinational (functional) logic (EXEC)
+to evaluate state_i -> p(instr_i, data_i) -> state_i+1
 
-  (_, _) = (steps.append(step), losses.append(loss.log10().item()))
-  if step % 10000 == 0: print(f"step: {step}/{200000}, loss {loss.item()}")
 
-plt.plot(steps, losses)
+---------------------------------------
+instruction processing loop.
+takes single machine clock cycle.
+in single-cycle machine.
+    - FETCH
+    - DECODE
+    - EXEC
+    - STORE
 
-# *********************INFERENCE LOOP*********************
-for _ in range(20): # n samples
-  output, context = [], [0] * T
-  while True:
-    # 1. preprocessing: C_VE[X_1T]
-    # print("tokens", context)
-    X_1T = picograd.tensor([context]) # B=1 for inference (1 response)
-    X_1TE = C_VE[X_1T] # X_1T ∈ [0..=26] must hold
-    X_1cTE = X_1TE.reshape((-1, T*E)) # reshape from 3dims -> 2dims B=1 TE
-    X = X_1cTE
+ s1 --P(i0)-> s0
+ |             |
+ ---------------
+single-cycle machine:  1 instr/clock
+(no intermediate programmer invisible states)
+cons: slowest instr. determines cycle time.
 
-    # 2. process: f: ℝ^d -> [0,1]^k
-    for h in model:
-      X = h(X)
-    y_hat = F.softmax(X, dim=1)
+contra multi-cycle machine: 1 instr/N clocks
+- updates made *during* instruction execution
+- slowest "stage". determines cycle time.
+-----------------------------------------
 
-    # 3. postprocess: sample + update
-    token = picograd.multinomial(y_hat, num_samples=1, replacement=True).item()#, generator=g).item()
-    output.append(decode[token])
-    context = context[1:] + [token]
-    if token == 0:
-        break
-  print(''.join(output))
-```
 
-## Recurrent Neural Networks (RNNs)
 
-## Long Short-Term Memory Networks (LSTMs)
 
-## Generative Pretrained Transformers (GPTs)
 
-- gpt2
-- gpt3
+#### Multi-cycle
 
-## Generative Pretrained Transformers (GPTs++)
+#### Pipelined
 
-- 1. manning ebook-2.torchtitan/torchtune-3.flexattention: llama1, llama2, llama3, llama4
-- modded nanogpt by keller. based on llm.c by karpathy.
-- beyondnanogpt
+### Memory
+
+# B.2 Compiler: Virtual Translators
+## Specialized JITs (Sea of Nodes): Hotspot's C2, v8's Turbofan, php's opcache, libfirm
+v8's turbofan: https://v8.dev/docs/turbofan
+jvm's hotspot: https://github.com/openjdk/jdk/tree/master/src/hotspot
+php's opcache: https://github.com/php/php-src/blob/master/ext/opcache/jit/README.md
+libfirm: https://libfirm.github.io
+
+
+### Frontend: Parsing
+### Middleend: Optimization
+### Backend: Generation
+
+## egraphs equivalence term rewriting: cranelift
+### Frontend: Parsing
+### Middleend: Optimization
+### Backend: Generation
+
+
+# B.3 Performance Analysis and Tuning
+- lab(micro)benchmarks: eliminate nondeterminism and noise
+- prod benchmaks: include nondeter. and noise. execution/wall clock time (latency)
+noise variance with clock freq (DFS: dynamic freq scalignpower scaling)
+    ==> variance with execution time (wall clock time)
+    - tools like temci??? exist to reduce variance
+- hotspots
+
+"active benchmarking": *guilty* until proven innocent
+
+https://rcs.uwaterloo.ca/~ali/cs854-f23/papers/onelevel.pdf
+criterion.rs
+https://rcs.uwaterloo.ca/~ali/cs854-f23/papers/topdown.pdf
+https://github.com/KDAB/hotspot
+https://nnethercote.github.io/perf-book/benchmarking.html

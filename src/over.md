@@ -1,4 +1,5 @@
 <!-- ![](./au197.jpg) -->
+
 # Singularity Systems Overview
 
 **Contents**
@@ -8,6 +9,47 @@
 ## Singularity Overview — Software 2.0
 
 ## Systems Overview — "Golden Age" Infrastructure Buildout
+
+
+implementing 4 compilers might be intimidating.
+In the same way artists paint over and over,
+and mathematicians rederive over and over, language implementors should
+represent over and over.
+
+```
+                  ,--.    ,--.
+                 ((O ))--((O ))
+               ,'_`--'____`--'_`.
+      _|---------------------------------|_             to the tensor
+     | |Tensor Compiler: Torch  -> Triton| |                  ^
+     | |Tiling Compiler: Triton -> PTX   | |                  ^
+     | |Vector Compiler: CUDA   -> PTX   | |                  ^
+     | |Scalar Compiler: C      -> RISC-V| |                  ^
+     | |---------------------------------| |           passing assembly
+     | |:::::::::::::::::::::::::::::::::| |                  ^
+     | |::::::::::::::µarch::::::::::::::| |                  ^
+     |_|:::::::::::::::::::::::::::::::::|_|                  ^
+       |---------------------------------|           from the transistor
+            __..-'            `-..__
+         .-| : .----------------. : |-.
+       ,\ || | |\______________/| | || /.
+      /`.\:| | ||  __  __  __  || | |;/,'\
+     :`-._\;.| || '--''--''--' || |,:/_.-':
+     |    :  | || .----------. || |  :    |
+     |    |  | || '----SSt---' || |  |    |
+     |    |  | ||   _   _   _  || |  |    |
+     :,--.;  | ||  (_) (_) (_) || |  :,--.;
+     (`-'|)  | ||______________|| |  (|`-')
+      `--'   | |/______________\| |   `--'
+             |____________________|
+              `.________________,'
+               (_______)(_______)
+               (_______)(_______)
+               (_______)(_______)
+               (_______)(_______)
+              |        ||        |
+              '--------''--------'
+```
 
 **Course Information**
 Singularity Systems: Zero to Hero follows up from
