@@ -1,12 +1,11 @@
 ![](./flammarion.webp)
 # Singularity Systems: Zero to Hero
-*Dragon Book 2.0: The Hacker's Guide to Tensor Programs and Compilers*
+*Dragon Book 2.0: The Hacker's Guide to Heterogenous Compilers*
 
 **Singularity Systems: Zero to Hero** is a SystemsML course
-designed for the age of heterogenous compute that powers [software 2.0](https://karpathy.medium.com/software-2-0-a64152b37c35).
+designed for the age of heterogenous compute and compilers.
 This textbook spans the entire semantic chasm **from the transistor to the tensor**
-by building 4 compilers (yes four) from scratch starting from the bottom up and
-ending with a stack of programming languages capable of compiling the [llama](https://arxiv.org/abs/2407.21783) family of models.
+by building 4 compilers (yes four) from scratch.
 
 #### Roadmap
 ```

@@ -2,43 +2,47 @@
 [Dedication](./dedi.md)
 [Overview](./over.md)
 
----
-# Scalar Processors: RISC-V
-- [Macroarchitecture: RISC-V]()
-- [Microarchitecture: Single-cycle, Multi-cycle, Pipelined]()
+<!-- https://www.youtube.com/watch?v=Qv-wXcUxrmE
+https://www.spinellis.gr/blog/20060626/
+https://rustc-dev-guide.rust-lang.org/overview.html?highlight=refcell#parallelism
+https://rustc-dev-guide.rust-lang.org/query.html
+https://clang.llvm.org
+https://www.youtube.com/watch?v=ZI198eFghJk&t=6s
+https://www.sigbus.info/how-i-wrote-a-self-hosting-c-compiler-in-40-days -->
+
+# Scalar Compilers: picoc
+- [A Batch of Dragons: Parser, Optimizer, Generator](./ch1.md)
+- [Calculator: Arithmetic, Bindings]()
+- [Control flow: Branches, Loops]()
 - [Memory:]()
 ---
-# Scalar Programs: C89
-- [Frontend: Parser]()
-- [Middleend: Optimizer]()
-- [Backend: Generator]()
+# Scalar Compilers: picoc redux
+- [Compile Time Designs: Incremental, Parallel]()
+- [Run Time Representations: CFG(BB), SoN]()
 ---
-# Optimizing Run Times
-- [Directed Acyclic Graphs: ASTs]()
-- [Two-tiered Graphs: CFG(BBs)]()
-- [Single-tiered Graphs: SoN]()
-- [Equivalence Graphs: egraphs]()
+# Vector Compilers: picocuda
 ---
-# Optimizing Compile Times
-- [Batched compilation]()
-- [Incremental compilation]()
-- [Data-oriented compilation]()
+# Tiling Compilers: picotile
 ---
-# Vector Processors: NEON, SSE, NVPTX
-- [Processor Parallelism (Instruction Level) Out of Order Speculative Executions, Superscalar, Branch Prediction]()
----
-# Vector Programs: CUDA C, Triton
----
-# Tensor Programs
-- [Eager Interpreters: PyTorch1]()
-- [Graph Compilers: PyTorch2](./ch5.md)
+# Tensor Compilers: picograd
+- [Eager Interpreters]()
+- [Graph Compilers](./ch5.md)
 
 ---
 
-# Appendix
+# Appendix: Sources and Targets
 
 <!-- [Mathematics](./apa.md) -->
-[A. Prediction: Posteriors, Parameters](./apa.md)
-[B. Pre-training: Generation](./ch1.md)
+[A Scalar Processors: RISCV]()
+[B Vector Processors: NEON, SEE, NVPTX]()
+<!-- # Vector Processors: NEON, SSE, NVPTX
+- [Processor Parallelism (Instruction Level) Out of Order Speculative Executions, Superscalar, Branch Prediction]() -->
+<!-- - [Macroarchitecture: RISC-V]()
+- [Microarchitecture: Single-cycle, Multi-cycle, Pipelined]()
+- [Memory:]() -->
+[C Tensor Processors: ]()
+[D Tensor Programs: llama2, r1](./apa.md)
+<!-- [B Prediction: Posteriors, Parameters](./apa.md)
+[C Pre-training: Generation](./ch1.md) -->
 
 [Bibliography](./bib.md)

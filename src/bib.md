@@ -7,8 +7,10 @@
 - **Probability Theory** Piech -> Chan -> Tao -> Varadhan
 - **Machine Learning** Jurafsky/Martin -> Ng/Ma -> MacKay -> Murphy -> Cho
 - **Deep Learning** Cho -> Goodfellow -> Zhang et al -> Ermon/Grover
-- **Compilers** Pfenning et al. -> Myers -> Appel-> Sampson -> Muchnick
+- **Compilers** Pfenning et al. -> Myers -> Appel -> Sampson -> Willsey
 - **Chips** Harris -> Hennessy -> Herlihy -> Kirk/Hwu
+
+todo: wilsley https://github.com/mwillsey/cs265/tree/2024-fall?tab=readme-ov-file
 
 ## References
 
@@ -50,8 +52,6 @@ Mackay, D. J. C. (2003). Information theory, inference, and learning algorithms.
 
 Møller , Anders, and Michael I. Schwartzbach. Static Program Analysis. 2024, https://cs.au.dk/~amoeller/spa/.
 
-Muchnick, S. S. (2014). Advanced Compiler Design and implementation. Morgan Kaufmann
-
 Murphy, K. P. (2022). Probabilistic machine learning : an introduction. MIT Press [https://probml.github.io/pml-book/book1.html](https://probml.github.io/pml-book/book1.html).
 
 Murphy, K. P. (2023). Probabilistic Machine Learning: Advanced Topics. MIT Press [https://probml.github.io/pml-book/book2.html](https://probml.github.io/pml-book/book2.html).
@@ -62,7 +62,7 @@ Ng, A., & Ma, T. (2023). CS229 Lecture Notes [https://cs229.stanford.edu/main_no
 
 Piech, C. (2023). Probability for Computer Scientists. [https://chrispiech.github.io/probabilityForComputerScientists/en](https://chrispiech.github.io/probabilityForComputerScientists/en).
 
-Pfenning, Frank, et al. “15-411/611 Lecture Notes.” CMU, 2024, https://www.cs.cmu.edu/~janh/courses/411/24/schedule.html.
+Pfenning, Frank, et al. “15-411/611 Lecture Notes.” CMU, 2024, [https://www.cs.cmu.edu/~janh/courses/411/24/schedule.html](https://www.cs.cmu.edu/~janh/courses/411/24/schedule.html).
 
 S R S Varadhan. (2001). Probability theory. Courant Institute Of Mathematical Sciences ; Providence, R.I. [https://www.ams.org/books/cln/007/cln007-endmatter.pdf](https://www.ams.org/books/cln/007/cln007-endmatter.pdf)
 
