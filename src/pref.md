@@ -5,14 +5,7 @@
 **Singularity Systems: Zero to Hero** is a SystemsML course
 designed for the age of heterogenous compute and compilers.
 This textbook spans the entire semantic chasm **from the transistor to the tensor**
-by building 4 compilers (yes four) from scratch.
-
-#### Roadmap
-```
-v1.0: pretraining llama
-v1.5: distributed pretraining llama
-v2.0: post-training (r1) and inference systems (vllm/sglang)
-```
+by building 4 compilers (yes 4) from scratch.
 
 #### Contributing
 
