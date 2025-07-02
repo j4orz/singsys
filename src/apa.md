@@ -1,3 +1,10 @@
+https://lurklurk.org/linkers/linkers.html
+https://eli.thegreenplace.net/tag/linkers-and-loaders
+https://eli.thegreenplace.net/2010/05/05/introducing-luz
+https://lwn.net/Articles/276782/
+
+macro vs micro: https://yosefk.com/blog/hardware-macroarchitecture-vs-microarchitecture.html
+
 ### Microarchitecture: Single-cycle, Multi-cycle, Pipelined
 
 - general purpose registers

@@ -3,7 +3,4 @@ authors = ["jeffzh4ng"]
 language = "en"
 multilingual = false
 src = "src"
-title = "Singularity Systems: Zero to Hero"
-
-[preprocessor.katex]
-after = ["links"]
+title = "Tensor Compilers: Zero to Hero"
