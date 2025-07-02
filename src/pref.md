@@ -1,18 +1,16 @@
 ![](./flammarion.webp)
 # Tensor Compilers: Zero to Hero
-*Dragon Book 2.0: The Hacker's Guide to Heterogenous Compilers*
+*The Hacker's Guide to Heterogenous Compilation*
 
-**Tensor Compilers: Zero to Hero** is a SystemsML course
-designed for the age of heterogenous compute and compilers.
-This textbook spans the entire semantic chasm **from the transistor to the tensor**
-by building 4 compilers (yes 4) from scratch.
-
-- textbook and lectures go hand in hand.
+#### Prerequisites
+- Software 1.0: NP-Hard Graph Algorithms and DP/Greedy Heuristics
+- Software 2.0: Pretrainined Models
 
 #### Contributing
 
-The textbook and its 4 compilers are all [open source](https://github.com/j4orz/).
-For discussion come join us at the `#singularity-systems` work group in the [GPU Mode Discord](https://discord.com/invite/Wu4pdW8QqM).
+The textbook and its from-scratch implementations are all [open source](https://github.com/j4orz/).
+For discussion come join us in the [GPU Mode Discord](https://discord.com/invite/Wu4pdW8QqM)
+`#singularity-systems` work group.
 
 #### Citation
 ```

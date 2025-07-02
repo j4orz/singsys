@@ -45,8 +45,16 @@ words as instructions, and their vocabulary as instruction set architeture (ISA)
 
 All modern day ISAs owe spiritual debt to the family of System/360 mainframes,
 made by International Business Machines. They were the first computers to unify
-under a single ISA [(Amdahl, Blaauw, Brooks, Jr 1964)](https://www.ece.ucdavis.edu/~vojin/CLASSES/EEC272/S2005/Papers/IBM360-Amdahl_april64.pdf) where the ISA reference card
+under a single ISA [(Amdahl, Blaauw, Brooks, Jr 1964)](https://www.ece.ucdavis.edu/~vojin/CLASSES/EEC272/S2005/Papers/IBM360-Amdahl_april64.pdf) where the ISA reference cardI
 became infamously known as the ["green card"](http://archive.computerhistory.org/resources/access/text/2010/05/102678081-05-01-acc.pdf).
+
+"IBM announced a line of six computers of vastly different cost and performance that all executed the same software, introducing the concept of the instruction set architecture (ISA) as an entity distinct from its hardware implementation"
+
+reducing the number of mandatory user-level hardware instructions to 40. As with many RISC instruction sets, the remaining instructions fall into three categories: com- putation, control flow, and memory access. RISC-V is a load-store architecture, in which arithmetic instructions operate only on the registers, and only loads and stores transfer data to and from memory.
+
+As Figure 3.1 shows, the entirety of the user-visible architectural state totals 1024 bits (32 registers, 32 bits).
+
+Even though some instructions may not require all 32 bits of encoding, variable-length instructions would add complexity. Simplicity would also encourage a single-instruction format, but that is too restrictive. However, this issue allows us to introduce the last design principle:
 
 ![](./ibm360.jpg)
 
@@ -645,12 +653,51 @@ So my opinions and knowledge are all a bit stale; probably pretty safe to disreg
 Cliff Click — 2023-01-07, 5:58 PM
 For Intel for decades, it has been the case of "horseshoes and hand grenades" - close is good enough.  RISC'y things (Arm, RISC5, older gen RISC) it pays more to Get It Right.  Not so on intel.  Just get close, and the hardware sorts it out.
 ---
+yeah, scheduled v-ops like they is "micro ops" with best effort global scheduler.  So out of loops, and into slow/low-freq paths.  After that, greedy-forwards works fine and is easy to understand/debug.
+And with X86, like with horseshoes, hand grenades and thermonuclear devices, close is good enough.
+---
+I think in terms of profitability it's something like:
+Aggressively inlining coupled with an allocator resilient to high live range counts; no more cost to inline in the spilling than what you'd get from function prolog/epilog.  Parser + reg-alloc are probably 80% of execution time together.  The reg-alloc is ~40% and grows slowly as methods get larger (slow O(n^2) growth).  Parser time is just stupid (see the above discussion about redo'ing the parser).  Parser had been too fast to bother with, when I started, but lots of fingers got in that pie, and it got piggy and slow.
+Loop opts, if you have loops.  Maybe 10% of compilation time.  Huge huge wins on the right kinds of loops, nothing otherwise.
+Combined pessimistic peephole/constant-prop/DCE/CSE code-motion on.  Super cheap to run; provable linear and incremental, so it's run all the time.  Probably 50% of total performance gains for almost no cost.
+Optimistic c-prop.  Can find more not-nils and remove nil-checks.  Not hugely profitable but not very expensive either, nor a lot of engineering.  With the pessimistic version above, maybe 10% of compile time cost.
+Global scheduling is worth some small performance.  Very cheap to run.
+Instruction selection looks smart, but is stupid, too cheap to measure, don't care.
+----
+GVN
+Yasser A — 2025-06-20, 5:29 AM
+so the difference is that its harder to combine GVN with other opts in SSA-CFG
+Tomi — 2025-06-20, 5:29 AM
+and because the ssa property holds, there is only one assignment so lvn is not needed
+what is the difference between CSE and GVN btw? people claim GVN is smarter
+Yasser A — 2025-06-20, 5:37 AM
+short answer is that CSE does lexical equivalences, it's a pre-SSA optimization. In practice people do throw both names together but yea
+GVN has to do with the fact that each name refers to one assignment, so you never ask the available expressions questions that you would in CSE
+since it's not like the values can change
+they're by definition available if they're used
+that's also because the definition dominates the uses
+basically CSE has to prove that values aren't changing behind its back, something that SSA and thus GVN give us for free
+Yasser A — 2025-06-20, 5:41 AM
+you'll need dominance info which is why its harder to combine
+that's kinda the annoyance with SSA-CFG that doesn't get addressed enough, I've noticed it when talking to people who complain about SoN
+they'll talk about the global scheduling cost
+but they never even compare that against the costs of scheduling in SSA-CFG as if that's free
+if you wanna do GVN and combine it with other optimizations then you'll need to re-evaluate your dominators constantly and schedule nodes based on that constantly
+you're effectively smearing the global schedule costs across passes
+if you do separate passes such that GVN and other opts run separately, then that'll introduce more phase ordering problems
+that's why LLVM separates some control and data optimization passes from each other than I might keep together
+most of SimplifyCFG and InstCombine for instance, my peeps handle both together plus pessimistic GVN because I don't have to pay the same cost of invalidating dominators or redoing the CFG
+---
+Yeah.  As said they both happened at once.  SoN was a consequence of realizing I could drop a bunch of stuff (location info) and was going to pick it up later anyways so why not (everybody ran local/global scheduling algos back then).  So then I was busy doinbg global peeps & folding things up... AND wrestling with the top-down-vs-bottom-up issues AND moving CFG info into the type lattice.  Suddenly popped to the symmetry of it all, and said "these unrelated things I am doing all together interleaved, and the peeps do it bottom-up, but the top-down version is entirely symmetric if I can fold the required info into a lattice"
 
 
 
+SCHEDULER
+---
+Simples scheduler is very reg pressure aware when single reg defs are around. Like eg X86 flags or 90%of @Darrick Wiebe s GPU like thing
+---
 
-
-
+---
 In the first chapter we will
 ```c
 int main() {
@@ -669,20 +716,6 @@ Abstract syntax
 still linear scan but this time im taking after some of the C1 decisions
 i'll eventually write the fancier graph coloring one but this will get me past the "finish line" in terms of a competent compiler 
 did so for LLVM back when they were in my spot
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <!-- NB. SoN is the third:
     a. tree: precedence is represented via tree's hierarchy.
