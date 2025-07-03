@@ -3,7 +3,7 @@
 *The Hacker's Guide to Heterogenous Compilation*
 
 #### Prerequisites
-- Software 1.0: NP-Hard Graph Algorithms and DP/Greedy Heuristics
+- Software 1.0: NP-Hard Graph Algorithms
 - Software 2.0: Pretrainined Models
 
 #### Contributing
