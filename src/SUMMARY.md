@@ -3,12 +3,16 @@
 <!-- [Overview](./over.md) -->
 
 # Scalar Compilers: `picoc`
+- [Scalar Compilers: ...]()
 - [AST Compilers: pcc/lcc]()
-    - [One Pass Compiler]()
-        - [Parser: Recursive Descent]()
-        - [Codegen]()
+    - [Standard Implementation Plan]()
+        - [IR: Modeling Programs]()
+        - [Codegen: Lowering Programs]()
             - [Selector: Greedy Tree Covering]()
             - [Alloctor: Register Pool]()
+        - [Parser: Lifting Programs]()
+            - [Lexer:]()
+            - [Parser: Recursive Descent]()
     - [Ghoulom Approach]()
         - [Calculator: Arithmetic, Bindings](./ch1.md)
         - [Control Flow: Branches, Loops]()
@@ -32,7 +36,8 @@
 - [Optimizing Optimizing Compilers: rust, carbon, zig]()
     - [Incremental Compilation]()
     - [Parallel Compilation]()
-    - [Arena Memory Management]()
+- [Correcting Optimizing Compilers:]()
+    - [Semantics]()
 ---
 # Vector Compilers: `picocuda`, `picotriton`
 ---

@@ -104,7 +104,7 @@ https://discord.com/channels/1043278575190691914/1142238075318190110/11570436517
 -> gotta have machine ops to know what machine regs to use
 -> all problems are NP-complete.
 
-Codegen is as easy or difficult as you like.  Many many PhDs have been written about codegen.
+<!-- Codegen is as easy or difficult as you like.  Many many PhDs have been written about codegen.
 I suspect LLVM's codegen is a "wee bit larger" than barely a single function.
 Say like 1MLOC or such.  🙄 
 I can do a job that I think is "ok-ish" in probably 10K lines for an X86.
@@ -715,7 +715,7 @@ Abstract syntax
 
 still linear scan but this time im taking after some of the C1 decisions
 i'll eventually write the fancier graph coloring one but this will get me past the "finish line" in terms of a competent compiler 
-did so for LLVM back when they were in my spot
+did so for LLVM back when they were in my spot -->
 
 <!-- NB. SoN is the third:
     a. tree: precedence is represented via tree's hierarchy.
