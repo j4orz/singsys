@@ -9,8 +9,8 @@
 #### Contributing
 
 The textbook and its from-scratch implementations are all [open source](https://github.com/j4orz/).
-For discussion come join us in the [GPU Mode Discord](https://discord.com/invite/Wu4pdW8QqM)
-`#singularity-systems` work group.
+To conribute or discuss, join the `#singularity-systems` work group in the
+[GPU Mode Discord](https://discord.com/invite/Wu4pdW8QqM).
 
 #### Citation
 ```
